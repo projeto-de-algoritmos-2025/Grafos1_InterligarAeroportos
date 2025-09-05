@@ -5,8 +5,9 @@ def process_airports_data():
     """
     Processa o arquivo airports.dat e cria airports_min.csv com apenas id, name, lat, lon
     """
-    input_file = os.path.join('..', 'data', 'airports.dat')
-    output_file = os.path.join('..', 'data', 'airports_min.csv')
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    input_file = os.path.join(base_dir, '..', 'data', 'airports.dat')
+    output_file = os.path.join(base_dir, '..', 'data', 'airports_min.csv')
     
     airports_processed = 0
     
@@ -51,8 +52,9 @@ def process_routes_data():
     """
     Processa o arquivo routes.dat e cria routes_min.csv com apenas src_id, dst_id, airline
     """
-    input_file = os.path.join('..', 'data', 'routes.dat')
-    output_file = os.path.join('..', 'data', 'routes_min.csv')
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    input_file = os.path.join(base_dir, '..', 'data', 'routes.dat')
+    output_file = os.path.join(base_dir, '..', 'data', 'routes_min.csv')
     
     routes_processed = 0
     invalid_routes = 0
@@ -65,19 +67,21 @@ def process_routes_data():
             writer = csv.writer(outfile)
             
             # Escrever cabeçalho
-            writer.writerow(['src_id', 'dst_id', 'airline'])
+            writer.writerow(['src_id', 'dst_id'])
             
+            unique_routes = set()
             for row in reader:
                 if len(row) >= 6:  # Garantir que temos dados suficientes
-                    airline = row[0]
                     src_airport_id = row[3]  # Source airport ID
                     dst_airport_id = row[5]  # Destination airport ID
-                    
                     # Verificar se os IDs são válidos (não são \N e são numéricos)
                     if (src_airport_id != '\\N' and dst_airport_id != '\\N' and 
                         src_airport_id.isdigit() and dst_airport_id.isdigit()):
-                        writer.writerow([src_airport_id, dst_airport_id, airline])
-                        routes_processed += 1
+                        route_key = (src_airport_id, dst_airport_id)
+                        if route_key not in unique_routes:
+                            writer.writerow([src_airport_id, dst_airport_id])
+                            unique_routes.add(route_key)
+                            routes_processed += 1
                     else:
                         invalid_routes += 1
     

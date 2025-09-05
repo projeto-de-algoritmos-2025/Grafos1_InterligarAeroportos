@@ -37,8 +37,7 @@ class AirportMapVisualizer:
             if route['src_id'] in self.graph.nodes and route['dst_id'] in self.graph.nodes:
                 self.graph.add_edge(
                     route['src_id'],
-                    route['dst_id'],
-                    airline=route['airline']
+                    route['dst_id']
                 )
     
     def haversine_distance(self, lat1: float, lon1: float, lat2: float, lon2: float) -> float:
@@ -156,7 +155,6 @@ class AirportMapVisualizer:
                 line=dict(width=0.5, color='rgba(255, 0, 0, 0.2)'),
                 showlegend=False,
                 hovertemplate=f'<b>Rota:</b> {src_airport["name"]} → {dst_airport["name"]}<br>' +
-                             f'<b>Companhia:</b> {route["airline"]}<br>' +
                              f'<b>Distância:</b> {self.haversine_distance(src_airport["lat"], src_airport["lon"], dst_airport["lat"], dst_airport["lon"]):.0f} km<extra></extra>'
             ))
 

@@ -78,8 +78,11 @@ def plot_geo_graph(G, path=[]):
     return fig
 
 # carregar dados 
-airports_file = os.path.join("..", "data", "airports_min.csv")
-routes_file = os.path.join("..", "data", "routes_min.csv")
+# Determina o diretório do script atual e constrói o caminho correto
+script_dir = os.path.dirname(os.path.abspath(__file__))
+data_dir = os.path.join(os.path.dirname(script_dir), "data")
+airports_file = os.path.join(data_dir, "airports_min.csv")
+routes_file = os.path.join(data_dir, "routes_min.csv")
 
 if not os.path.exists(airports_file) or not os.path.exists(routes_file):
     raise FileNotFoundError("Certifique-se de que os arquivos CSV estão em ../data/")
